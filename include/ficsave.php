@@ -65,6 +65,18 @@ function mailAttachment($downloadId, $fileName, $path, $email) {
 }
 
 function cURL($url, $referrer = '') {
+
+		$process = popen('/opt/app/sandstorm/bin/httpGet ' . $_SERVER['HTTP_X_SANDSTORM_SESSION_ID'] . ' ' . $url, 'r');
+		$response = stream_get_contents($process);
+	
+		$return_value = pclose($process);
+		if ($return_value != 0) {
+				throw new FicSaveException("Curl error " . $return_value . " " . $response);
+		}
+		return $response;
+}
+
+function cURL_d($url, $referrer = '') {
     $curl_handle = curl_init();
     curl_setopt($curl_handle, CURLOPT_URL, $url);
     curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 5);
@@ -74,6 +86,9 @@ function cURL($url, $referrer = '') {
     curl_setopt($curl_handle, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0');
     curl_setopt($curl_handle, CURLOPT_REFERER, $url);
     $response = curl_exec($curl_handle);
+		if ($response === false) {
+				throw new FicSaveException(curl_error($curl_handle));
+		}
     curl_close($curl_handle);
     return $response;
 }

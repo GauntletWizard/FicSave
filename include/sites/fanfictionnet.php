@@ -37,16 +37,20 @@ function getFanfictionNetInfo($url) {
     if (isset($pathParts[2])) {
         $storyId = $pathParts[2];
         if (is_numeric($storyId)) {
-            $response = cURL($url);
-            $html = new HTML5();
-            $html = $html->loadHTML($response);
+						$response = cURL($url);
+						$html = new HTML5();
+						$html = $html->loadHTML($response);
 
             $story = new Story;
             $story->id = $storyId;
             $urlParts = parse_url($url);
-            $story->url = "{$urlParts['scheme']}://{$urlParts['host']}/s/{$storyId}";
+						try {
+		            $story->url = "{$urlParts['scheme']}://{$urlParts['host']}/s/{$storyId}";
+										$title = qp($html, '#profile_top')->find('b')->first()->text();
+						} catch (Exception $ex) {
+								throw new FicSaveException("Parse failed. " . $html->saveHTML());
+						}
 
-            $title = qp($html, '#profile_top')->find('b')->first()->text();
             if (empty($title)) {
                 throw new FicSaveException("Could not retrieve title for story at $url.");
             } else {

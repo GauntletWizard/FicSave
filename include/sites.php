@@ -48,7 +48,11 @@ function getInfo($url) {
             throw new FicSaveException("Invalid URL! Please make sure you have pasted the exact link.");
         }
     } catch (Exception $ex) {
-        throw new FicSaveException("Invalid URL! Please make sure you have pasted the exact link.");
+				if (is_a($ex, 'FicSaveException')) {
+						throw $ex;
+				} else {
+        		throw new FicSaveException("Parsing failed! Please make sure you have pasted the exact link. " . $ex);
+				}
     }
 }
 

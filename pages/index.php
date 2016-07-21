@@ -95,7 +95,6 @@
                         </form>
                         <div>Every donation helps keep the site running!</div>
                         <div>Donations this month (after fees):</div>
-                        <div style='font-size:20px;'><strong>$<?= getDonateAmount() ?> USD</strong></div>
                     </div>
                 </div>
                 <?php

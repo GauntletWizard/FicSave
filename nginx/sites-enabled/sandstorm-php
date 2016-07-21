@@ -1,0 +1,44 @@
+server {
+    listen 8000 default_server;
+    listen [::]:8000 default_server ipv6only=on;
+
+    # Allow arbitrarily large bodies - Sandstorm can handle them, and requests
+    # are authenticated already, so there's no reason for apps to add additional
+    # limits by default.
+    client_max_body_size 0;
+
+    log_subrequest on;
+    log_not_found on;
+    server_name localhost;
+    root /opt/app;
+    location / {
+        index index.php;
+        try_files $uri $uri/ =404;
+    }
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+#        fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param  SCRIPT_FILENAME $document_root/index.php;
+        include fastcgi_params;
+    }
+    location ~ /api {
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+#        fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param  SCRIPT_FILENAME $document_root/index.php;
+				try_files $uri index.php;
+        include fastcgi_params;
+    }
+    location ~ /download {
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+#        fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param  SCRIPT_FILENAME $document_root/index.php;
+				try_files $uri index.php;
+        include fastcgi_params;
+    }
+}

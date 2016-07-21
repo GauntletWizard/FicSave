@@ -1,0 +1,1 @@
+{"virtualbox":{"/opt/app":{"guestpath":"/opt/app","hostpath":"/home/ted/code/FicSave","disabled":false},"/host-dot-sandstorm":{"guestpath":"/host-dot-sandstorm","hostpath":"/home/ted/.sandstorm","disabled":false},"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/ted/code/FicSave","disabled":false}}}

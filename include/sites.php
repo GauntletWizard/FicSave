@@ -3,6 +3,7 @@ require 'sites/fanfictionnet.php';
 require 'sites/adultfanfiction.php';
 require 'sites/hpfanficarchive.php';
 require 'sites/asianfanfics.php';
+require 'sites/fimfictionnet.php';
 
 function getChapter($url, $chapterNumber, $metadata) {
     try {
@@ -16,6 +17,8 @@ function getChapter($url, $chapterNumber, $metadata) {
             return getHPFanficArchiveChapter($url, $chapterNumber, $metadata);
         } else if ($host == 'www.asianfanfics.com') {
             return getAsianFanficsChapter($url, $chapterNumber);
+        } else if ($host == 'www.fimfiction.net') {
+            return getFimfictionNetChapter($url, $chapterNumber);
         } else {
             throw new FicSaveException("This should never happen.");
         }
@@ -42,17 +45,19 @@ function getInfo($url) {
                 return getHPFanficArchiveInfo($url);
             } else if ($host == 'www.asianfanfics.com') {
                 return getAsianFanficsInfo($url);
+            } else if ($host == 'www.fimfiction.net') {
+                return getFimfictionNetInfo($url);
             }
             throw new FicSaveException("That website is not supported by FicSave :(");
         } else {
             throw new FicSaveException("Invalid URL! Please make sure you have pasted the exact link.");
         }
     } catch (Exception $ex) {
-				if (is_a($ex, 'FicSaveException')) {
-						throw $ex;
-				} else {
-        		throw new FicSaveException("Parsing failed! Please make sure you have pasted the exact link. " . $ex);
-				}
+        if (is_a($ex, 'FicSaveException')) {
+            throw $ex;
+        } else {
+            throw new FicSaveException("Parsing failed! Please make sure you have pasted the exact link. " . $ex);
+        }
     }
 }
 
